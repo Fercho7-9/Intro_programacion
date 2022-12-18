@@ -20,12 +20,11 @@ public class Palindromo {
         }
         //determinamos is es palindomo o no
         if (palabra.equals(palabra_invertida)){
-            System.out.println("Si es palabra palindromo ♥♥♥Iloveyou♥♥♥");
+            System.out.println("Si es palabra palindromo);
         }
         else {
             System.out.println("No es palabra palindromo");
         }
-        System.out.println("♥");
         //pasamos los carcteres de palbra al arreglo palabras_arr
 
 

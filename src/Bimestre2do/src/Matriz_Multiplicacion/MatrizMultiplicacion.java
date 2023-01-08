@@ -2,29 +2,29 @@ import java.util.Scanner;
 
 public class MatrizMultiplicacion {
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
+        Scanner teclado = new Scanner(System.in);
         System.out.println("Ingrese las filas de la primera matriz que usted desea poner: ");
-        int m1 = sc.nextInt();
+        int f1 = teclado.nextInt();
         System.out.println("Ingrese las columnas de la primera matriz que usted desea poner: \"");
-        int c1= sc.nextInt();
+        int c1= teclado.nextInt();
         System.out.println("Ingrese las filas de la segunda matriz que usted desea poner: \"");
-        int m2 = sc.nextInt();
+        int f2 = teclado.nextInt();
         System.out.println("Ingrese las columnas de la segunda matriz que usted desea poner: \"");
-        int c2= sc.nextInt();
-        int matriz1 [][]= new int[m1][c1];
-        int matriz2[][]= new int[m2][c2];
+        int c2= teclado.nextInt();
+        int matriz1 [][]= new int[f1][c1];
+        int matriz2[][]= new int[f2][c2];
         int matriz3[][]=new int[matriz1.length][matriz2[0].length];
-        if (m1==c2 && c1==m2){
+        if (f1==c2 && c1==f2){
             System.out.println("Ingrese los datos de la primera matriz");
             for (int indice1 = 0; indice1 < matriz1.length; indice1++) {
                 for (int indice2 = 0; indice2 < matriz1[0].length; indice2++) {
-                    matriz1[indice1][indice2]= sc.nextInt();
+                    matriz1[indice1][indice2]= teclado.nextInt();
                 }
             }
             System.out.println("Ingrese los datos de la segunda matriz");
             for (int indice1 = 0; indice1 < matriz2.length; indice1++) {
                 for (int indice2 = 0; indice2 < matriz2[0].length; indice2++) {
-                    matriz2[indice1][indice2]= sc.nextInt();
+                    matriz2[indice1][indice2]= teclado.nextInt();
                 }
             }
             System.out.println("Primer Matriz");
@@ -58,8 +58,7 @@ public class MatrizMultiplicacion {
                 System.out.println("\n");
             }
         }else{
-            System.out.println("Los datos ingresados son erroneos");
+            System.out.println("Imposible hacer la operacion");
         }
     }
 }
-

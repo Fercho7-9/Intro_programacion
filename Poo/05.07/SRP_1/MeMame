@@ -1,0 +1,221 @@
+
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+abstract class Empleado {
+private String nombre;
+private String apellidos;
+private String cedula;
+private String direccion;
+private int antiguedad;
+private String telefono;
+
+public Empleado(String nombre, String apellidos, String cedula, String direccion, int antiguedad, String telefono) {
+this.nombre = nombre;
+this.apellidos = apellidos;
+this.cedula = cedula;
+this.direccion = direccion;
+this.antiguedad = antiguedad;
+this.telefono = telefono;
+}
+
+public abstract double calcularSalario();
+
+public String getNombre() {
+return nombre;
+}
+
+public String getApellidos() {
+return apellidos;
+}
+
+public String getCedula() {
+return cedula;
+}
+
+public String getDireccion() {
+return direccion;
+}
+
+public int getAntiguedad() {
+return antiguedad;
+}
+
+public String getTelefono() {
+return telefono;
+}
+}
+
+class Secretario extends Empleado {
+private String despacho;
+private double horasLaboradas;
+private double costoHora;
+
+public Secretario(String nombre, String apellidos, String cedula, String direccion, int antiguedad, String telefono, String despacho, double horasLaboradas, double costoHora) {
+super(nombre, apellidos, cedula, direccion, antiguedad, telefono);
+this.despacho = despacho;
+this.horasLaboradas = horasLaboradas;
+this.costoHora = costoHora;
+}
+
+public String getDespacho() {
+return despacho;
+}
+
+public double calcularSalario() {
+double salario = horasLaboradas * costoHora;
+if (horasLaboradas > 40) {
+double horasExtras = horasLaboradas - 40;
+salario += horasExtras * costoHora * 0.5;
+}
+return salario;
+}
+}
+
+class Vendedor extends Empleado {
+private String cocheMatricula;
+private String cocheMarca;
+private String cocheModelo;
+private String telefonoMovil;
+private String areaVenta;
+private double comisiones;
+
+public Vendedor(String nombre, String apellidos, String cedula, String direccion, int antiguedad, String telefono,
+String cocheMatricula, String cocheMarca, String cocheModelo, String telefonoMovil, String areaVenta,
+double comisiones) {
+super(nombre, apellidos, cedula, direccion, antiguedad, telefono);
+this.cocheMatricula = cocheMatricula;
+this.cocheMarca = cocheMarca;
+this.cocheModelo = cocheModelo;
+this.telefonoMovil = telefonoMovil;
+this.areaVenta = areaVenta;
+this.comisiones = comisiones;
+}
+
+public String getCocheMatricula() {
+return cocheMatricula;
+}
+
+public String getCocheMarca() {
+return cocheMarca;
+}
+
+public String getCocheModelo() {
+return cocheModelo;
+}
+
+public double calcularSalario() {
+return 0; // Implementar cálculo del salario del vendedor
+}
+}
+
+class JefeZona extends Empleado {
+private String despacho;
+private Secretario secretario;
+private List<Vendedor> vendedores;
+
+public JefeZona(String nombre, String apellidos, String cedula, String direccion, int antiguedad, String telefono,
+String despacho, Secretario secretario) {
+super(nombre, apellidos, cedula, direccion, antiguedad, telefono);
+this.despacho = despacho;
+this.secretario = secretario;
+this.vendedores = new ArrayList<>();
+}
+
+public String getDespacho() {
+return despacho;
+}
+
+public Secretario getSecretario() {
+return secretario;
+}
+
+public void agregarVendedor(Vendedor vendedor) {
+vendedores.add(vendedor);
+}
+
+public double calcularSalario() {
+double ventasTotales = 0;
+for (Vendedor vendedor : vendedores) {
+ventasTotales += vendedor.calcularSalario();
+}
+return ventasTotales * 0.1;
+}
+}
+
+public class Ejecutor {
+public static void main(String[] args) {
+Secretario secretario = new Secretario("Juan", "Perez", "123456789", "Calle 123", 5, "123456789", "Despacho 1",
+45, 10.0);
+Vendedor vendedor1 = new Vendedor("Maria", "Lopez", "987654321", "Avenida 456", 3, "987654321",
+"ABC123", "Toyota", "Corolla", "987654321", "Zona A", 0.05);
+Vendedor vendedor2 = new Vendedor("Carlos", "Gomez", "567890123", "Plaza 789", 2, "567890123",
+"DEF456", "Honda", "Civic", "567890123", "Zona B", 0.03);
+
+JefeZona jefeZona = new JefeZona("Luis", "Ramirez", "456789012", "Avenida 789", 7, "456789012", "Despacho 2",
+secretario);
+jefeZona.agregarVendedor(vendedor1);
+jefeZona.agregarVendedor(vendedor2);
+
+List<Empleado> empleados = new ArrayList<>();
+empleados.add(secretario);
+empleados.add(vendedor1);
+empleados.add(vendedor2);
+empleados.add(jefeZona);
+
+for (Empleado empleado : empleados) {
+System.out.println("Empleado: " + empleado.getNombre() + " " + empleado.getApellidos());
+System.out.println("Cédula: " + empleado.getCedula());
+System.out.println("Dirección: " + empleado.getDireccion());
+System.out.println("Antigüedad: " + empleado.getAntiguedad() + " años");
+System.out.println("Teléfono: " + empleado.getTelefono());
+
+if (empleado instanceof Secretario) {
+Secretario secretaro = (Secretario) empleado;
+System.out.println("Despacho: " + secretario.getDespacho());
+}
+
+System.out.println("Salario: " + empleado.calcularSalario());
+System.out.println("-------------------------");
+}
+generarArchivoCSV(empleados, "nomina.csv");
+}
+
+
+// Generar archivo CSV
+
+private static void generarArchivoCSV(List<Empleado> empleados, String archivo) {
+try (FileWriter writer = new FileWriter(archivo)) {
+// Escribir encabezados
+writer.write("Nombre, Apellidos, Cedula, Direccion, Antiguedad, Telefono, Despacho, Salario\n");
+
+// Escribir datos de los empleados
+for (Empleado empleado : empleados) {
+StringBuilder sb = new StringBuilder();
+sb.append(empleado.getNombre()).append(", ");
+sb.append(empleado.getApellidos()).append(", ");
+sb.append(empleado.getCedula()).append(", ");
+sb.append(empleado.getDireccion()).append(", ");
+sb.append(empleado.getAntiguedad()).append(", ");
+sb.append(empleado.getTelefono()).append(", ");
+
+if (empleado instanceof Secretario) {
+Secretario secretario = (Secretario) empleado;
+sb.append(secretario.getDespacho()).append(", ");
+} else {
+sb.append(",");
+}
+
+sb.append(empleado.calcularSalario()).append("\n");
+
+writer.write(sb.toString());
+}
+
+System.out.println("Archivo CSV generado exitosamente.");
+} catch (IOException e) {
+System.out.println("Error al generar el archivo CSV: " + e.getMessage());
+}
+}
+}
